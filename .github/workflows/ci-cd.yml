@@ -78,6 +78,6 @@ jobs:
         run: |
           cd /home/debian/DevOps
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker-compose pull
-          docker-compose up -d
-          docker-compose ps
+          docker compose pull
+          docker compose up -d
+          docker compose ps
