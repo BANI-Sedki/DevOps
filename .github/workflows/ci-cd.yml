@@ -82,8 +82,8 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - name: Run unit tests only
-        run: mvn test -DskipITs
+      - name: Run unit tests only (show logs)
+        run: mvn -pl inventory-service test -DskipITs -e
 
   deploy:
     name: DEPLOY - Automatic Deployment
