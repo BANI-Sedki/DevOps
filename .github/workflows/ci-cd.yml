@@ -75,9 +75,19 @@ jobs:
 
     steps:
       - name: Deploy on VM (pull + up)
+        shell: bash
         run: |
           cd /home/debian/DevOps
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker compose pull
-          docker compose up -d
-          docker compose ps
+
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+          if command -v docker-compose >/dev/null 2>&1; then
+            DC="docker-compose"
+          else
+            DC="docker compose"
+          fi
+
+          $DC version || true
+          $DC pull
+          $DC up -d
+          $DC ps
