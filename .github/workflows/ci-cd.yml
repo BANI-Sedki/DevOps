@@ -82,8 +82,8 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - name: Run tests
-        run: mvn test
+      - name: Run tests (CI profile)
+        run: mvn test -Dspring.profiles.active=ci
 
   deploy:
     name: DEPLOY - Automatic Deployment
