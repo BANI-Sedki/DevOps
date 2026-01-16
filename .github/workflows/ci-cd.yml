@@ -82,8 +82,27 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - name: Run unit tests only (show logs)
-        run: mvn -pl inventory-service test -DskipITs -e
+      - name: Run unit tests (inventory-service) with full logs
+        run: mvn -pl inventory-service -am test -DskipITs -DtrimStackTrace=false -Dsurefire.printSummary=true -e
+
+      - name: Show failing test reports (inventory-service)
+        if: always()
+        run: |
+          echo "=== LIST surefire-reports ==="
+          ls -la inventory-service/target/surefire-reports || true
+          echo "=== PRINT *.txt ==="
+          for f in inventory-service/target/surefire-reports/*.txt; do
+            echo "----- $f -----"
+            sed -n '1,200p' "$f" || true
+            tail -n 200 "$f" || true
+          done
+
+      - name: Upload surefire reports (inventory-service)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: inventory-surefire-reports
+          path: inventory-service/target/surefire-reports/**
 
   deploy:
     name: DEPLOY - Automatic Deployment
